@@ -2,8 +2,16 @@ package threads;
 
 public class Agent extends Thread {
 
-    public Agent(){
+    private Object sensors;
+
+	public Agent(){
         super();
+        
+        // Sensor
+        this.sensors = {
+                environment:new EnvironmentSensor(),
+                position:new PositionSensor()
+        }
     }
 
     @Override

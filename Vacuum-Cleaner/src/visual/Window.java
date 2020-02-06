@@ -1,5 +1,6 @@
 package visual;
-    
+
+import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -31,13 +32,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class Window extends Application {
     
     private AnchorPane ap_scene;
     private BorderPane bp_all;
-    private GridPane gp_floor;
-    private GridPane gp_robot;
-    private GridPane gp_score;
+    private static GridPane gp_floor;
+    private static GridPane gp_robot;
+    private static GridPane gp_score;
     private StackPane sp_plateau;
     private StackPane sp_score;
     
@@ -51,25 +52,28 @@ public class Main extends Application {
     private Label lb_sucked;
     private Label lb_picked;
     
-    private Text tt_jewela;
-    private Text tt_jewels;
-    private Text tt_jewelp;
-    private Text tt_dirta;
-    private Text tt_dirts;
-    private Text tt_battery;
-    private Text tt_score;
+    private static Text tt_jewela;
+    private static Text tt_jewels;
+    private static Text tt_jewelp;
+    private static Text tt_dirta;
+    private static Text tt_dirts;
+    private static Text tt_battery;
+    private static Text tt_score;
     
-    private ListView<String> lv_travel;
-    private ObservableList<String> items;
+    private static ListView<String> lv_travel;
+    private static ObservableList<String> items;
 
-    private ImageView robot;
+    private static ImageView robot;
     
-    private int incView = 1;
+    private static int incView = 1;
     private ChoiceBox<String> cb_type;
     private ChoiceBox<String> cb_app;
 
+    private static final CountDownLatch latch = new CountDownLatch(1);
+    
+    
     // Init interface
-    public void init(){
+    public Window(){
          this.create_widgets();
          this.modify_widgets();
          this.create_layouts();
@@ -229,6 +233,15 @@ public class Main extends Application {
         this.sp_score.getChildren().addAll(this.rt_score, this.gp_score);
         this.sp_plateau.getChildren().addAll(this.gp_floor, this.gp_robot);
     }
+  
+    public static void awaitFXToolkit() throws InterruptedException {
+        latch.await();
+     }
+    
+    @Override
+    public void init() {
+        latch.countDown();
+    }
     
     // Add floor
     public void addFloor(int x, int y) {
@@ -237,27 +250,27 @@ public class Main extends Application {
     }
     
     // Add dirt in floor
-    public void addDirt(int x, int y) {
+    public static void addDirt(int x, int y) {
         ImageView pic = new ImageView(new Image(Path.Dirt, 50, 50, false, false));
         pic.setId("dirt");
-        this.gp_floor.add(pic, x, y);
+        Window.gp_floor.add(pic, x, y);
         GridPane.setHalignment(pic, HPos.CENTER);
     }
     
     // Add jewel in floor
-    public void addJewel(int x, int y) {
+    public static void addJewel(int x, int y) {
         ImageView pic = new ImageView(new Image(Path.Jewel, 50, 50, false, false));
         pic.setId("jewel");
-        this.gp_floor.add(pic, x, y);
+        gp_floor.add(pic, x, y);
         GridPane.setHalignment(pic, HPos.CENTER);
     }
     
     // Remove dirt in floor
-    public void removeDirt(int x, int y) {
-        for (Node node : this.gp_floor.getChildren()) {
+    public static void removeDirt(int x, int y) {
+        for (Node node : Window.gp_floor.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node.getId() == "dirt") {
                 //System.out.println(node.getId());
-                this.gp_floor.getChildren().remove(node);
+            	Window.gp_floor.getChildren().remove(node);
                 break;
             }
         }
@@ -265,7 +278,7 @@ public class Main extends Application {
     
     // Remove jewel in floor
     public void removeJewel(int x, int y) {
-        for (Node node : this.gp_floor.getChildren()) {
+        for (Node node : Window.gp_floor.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node.getId() == "jewel") {
                 System.out.println(node.getId());
                 this.gp_floor.getChildren().remove(node);
@@ -275,11 +288,11 @@ public class Main extends Application {
     }
     
     // Init robot in floor
-    public void initRobot(int x, int y) {
-        this.robot = new ImageView(new Image(Path.VacuumCleaner, 50, 50, false, false));
-        this.robot.setId("robot");
-        this.gp_robot.add(this.robot, x, y);
-        GridPane.setHalignment(this.robot, HPos.CENTER);
+    public static void initRobot(int x, int y) {
+        robot = new ImageView(new Image(Path.VacuumCleaner, 50, 50, false, false));
+        robot.setId("robot");
+        Window.gp_robot.add(robot, x, y);
+        GridPane.setHalignment(robot, HPos.CENTER);
     }
     
     // Get position robot
@@ -291,7 +304,7 @@ public class Main extends Application {
     }
     
     // Move Robot
-    public void moveRobot(Direction dir) throws InterruptedException {
+    public void moveRobot(Direction dir) {
         int[] pos = this.getPosRobot();
         switch(dir) {
             case Top:
@@ -319,9 +332,9 @@ public class Main extends Application {
     }
     
     // Print in ListView
-    public void printDirection(String dir) {
-        this.items.add(this.incView + ": " + dir);
-        this.incView++;
+    public static void printDirection(String dir) {
+        items.add(incView + ": " + dir);
+        incView++;
     }
 
     public void p() {
@@ -334,6 +347,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+    	//Stage stage = new Stage();
         Scene scene = new Scene(this.ap_scene,500,800);
         scene.getStylesheets().add(getClass().getResource(Path.CSS).toExternalForm());
         //scene.
@@ -344,18 +358,16 @@ public class Main extends Application {
         stage.show();
         
         // Test
-        this.printDirection("sqdqsdsqd");
-        this.printDirection("sqdqsdsqd");
         int[] p = {1,25,2,3,4,5,3};
         this.setScore(p);
-        this.initRobot(2, 2);
+        //this.initRobot(2, 2);
         //this.addJewel(1, 2);
         this.addDirt(1, 2);
         //this.removeJewel(1, 2);
         //this.p();
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         launch(args);
-    }
+    }*/
 }

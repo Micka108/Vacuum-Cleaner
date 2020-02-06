@@ -1,6 +1,11 @@
 package threads;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Application;
+import visual.Window;
+import java.util.concurrent.FutureTask;
+import javafx.application.Platform;
 
 public class Environnement extends Thread {
     private int[][] grid; // values 0: empty, 1: dust, 2: jewel, 3:both
@@ -12,8 +17,10 @@ public class Environnement extends Thread {
     private int pickedJewels;
     private int suckedJewels;
     private List<String> events;
+    public static Window window;
+    public Thread t;
 
-    public Environnement() {
+    public Environnement() throws InterruptedException {
         super();
         System.out.println("Creating the Environnement");
         this.grid = new int[5][5];
@@ -27,11 +34,27 @@ public class Environnement extends Thread {
         this.jewels = 0;
         this.pickedJewels = 0;
         this.suckedJewels = 0;
+        
         this.events = new ArrayList<String>();
+        this.execWindow();
+        Window.addDirt(3, 2);
     }
+    
+    private void execWindow() throws InterruptedException {
+        //this.window = new Window();
+        this.t = new Thread(() -> Application.launch(Window.class));
+        //new Thread(() -> Application.launch(Window.class)).start();
+        this.t.start();
 
-    private void generate() {
-        double prob = Math.random();
+        Window.awaitFXToolkit();
+        //this.window = new Window();
+        Window.addJewel(4, 4);
+        Window.printDirection("rrrrrrr");
+        Window.printDirection("rdfdfrrrrrr");
+    }
+    private void generate() throws InterruptedException {
+    	TimeUnit.SECONDS.sleep(2);
+    	double prob = Math.random();
         if (prob >= 0.10 && this.isGridFullOfDust() == false) {
             Random rand = new Random();
             int x;
@@ -108,10 +131,13 @@ public class Environnement extends Thread {
             this.dusts++;
             this.grid[x][y] += 1;
             System.out.println("New dust at "+x+";"+y);
+            Window.addDirt(x, y);
         } else if (keyword == "newJewel" && (this.grid[x][y] != 2 || this.grid[x][y] != 3)) {
             this.jewels++;
             this.grid[x][y] += 2;
             System.out.println("New jewel at "+x+";"+y);
+            Window.printDirection("New jewel at "+x+";"+y);
+            Window.addJewel(x, y);
         } else if (keyword == "suck") {
             this.actions++;
             if (this.grid[x][y] == 3) {
@@ -138,7 +164,12 @@ public class Environnement extends Thread {
     @Override
     public void run() {
         while(true){
-            this.generate();
+            try {
+				this.generate();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
