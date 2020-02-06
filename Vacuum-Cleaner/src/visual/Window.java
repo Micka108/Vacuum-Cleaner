@@ -12,7 +12,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
+//import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -66,8 +66,8 @@ public class Window extends Application {
     private static ImageView robot;
     
     private static int incView = 1;
-    private ChoiceBox<String> cb_type;
-    private ChoiceBox<String> cb_app;
+    //private ChoiceBox<String> cb_type;
+   // private ChoiceBox<String> cb_app;
 
     private static final CountDownLatch latch = new CountDownLatch(1);
     
@@ -95,18 +95,18 @@ public class Window extends Application {
         this.lb_picked = new Label("Picked");
         this.lb_all = new Label("All");
         // ListView
-        this.lv_travel = new ListView<String>();
+        Window.lv_travel = new ListView<String>();
         // Text
-        this.tt_jewela = new Text("0");
-        this.tt_jewels = new Text("0");
-        this.tt_jewelp = new Text("0");
-        this.tt_dirta = new Text("0");
-        this.tt_dirts = new Text("0");
-        this.tt_battery = new Text("0");
-        this.tt_score = new Text("0");
+        Window.tt_jewela = new Text("0");
+        Window.tt_jewels = new Text("0");
+        Window.tt_jewelp = new Text("0");
+        Window.tt_dirta = new Text("0");
+        Window.tt_dirts = new Text("0");
+        Window.tt_battery = new Text("0");
+        Window.tt_score = new Text("0");
         
-        this.cb_type = new ChoiceBox<String>(FXCollections.observableArrayList("Formelle", "Informelle"));
-        this.cb_app = new ChoiceBox<String>(FXCollections.observableArrayList("Apprentissage", "Sans"));
+        //this.cb_type = new ChoiceBox<String>(FXCollections.observableArrayList("Formelle", "Informelle"));
+        //this.cb_app = new ChoiceBox<String>(FXCollections.observableArrayList("Apprentissage", "Sans"));
     }
     
     // Modify widgets
@@ -122,19 +122,19 @@ public class Window extends Application {
         this.lb_battery.setGraphic(new ImageView(new Image(Path.Battery, 36, 36, false, false)));
         
         // Modify ListView
-        this.items = FXCollections.observableArrayList();
-        this.lv_travel.setItems(items);
-        this.lv_travel.setOrientation(Orientation.VERTICAL);
-        this.lv_travel.setPrefSize(450, 200);
+        Window.items = FXCollections.observableArrayList();
+        Window.lv_travel.setItems(items);
+        Window.lv_travel.setOrientation(Orientation.VERTICAL);
+        Window.lv_travel.setPrefSize(450, 200);
     }
     
     // Create layouts
     private void create_layouts() {
         this.ap_scene = new AnchorPane();
         this.bp_all = new BorderPane();
-        this.gp_floor = new GridPane();
-        this.gp_robot = new GridPane();
-        this.gp_score = new GridPane();
+        Window.gp_floor = new GridPane();
+        Window.gp_robot = new GridPane();
+        Window.gp_score = new GridPane();
         this.sp_score = new StackPane();
         this.sp_plateau = new StackPane();
     }
@@ -142,14 +142,14 @@ public class Window extends Application {
     // Modify layouts
     private void modify_layouts() {
         // Modify GridPane
-        this.gp_floor.setAlignment(Pos.CENTER);
-        this.gp_robot.setAlignment(Pos.CENTER);
-        this.gp_score.setAlignment(Pos.CENTER);
-        this.gp_score.setGridLinesVisible(false);
-        this.gp_score.setId("gp_score");
-        this.gp_score.setHgap(10);
-        this.gp_score.setVgap(5);
-        this.gp_score.setPadding(new Insets(20));
+        Window.gp_floor.setAlignment(Pos.CENTER);
+        Window.gp_robot.setAlignment(Pos.CENTER);
+        Window.gp_score.setAlignment(Pos.CENTER);
+        Window.gp_score.setGridLinesVisible(false);
+        Window.gp_score.setId("gp_score");
+        Window.gp_score.setHgap(10);
+        Window.gp_score.setVgap(5);
+        Window.gp_score.setPadding(new Insets(20));
 
         // Modify BorderPane
         this.bp_all.setLayoutX(20);
@@ -166,10 +166,10 @@ public class Window extends Application {
         this.ap_scene.setBackground(new Background(BI));
         
         BorderPane.setAlignment(this.sp_plateau, Pos.CENTER);
-        BorderPane.setAlignment(this.lv_travel, Pos.CENTER);
+        BorderPane.setAlignment(Window.lv_travel, Pos.CENTER);
         BorderPane.setMargin(this.sp_score, (new Insets(10, 10, 10, 10)));
         BorderPane.setMargin(this.sp_plateau, (new Insets(10, 10, 10, 10)));
-        BorderPane.setMargin(this.lv_travel, (new Insets(10, 10, 10, 10)));
+        BorderPane.setMargin(Window.lv_travel, (new Insets(10, 10, 10, 10)));
     }   
     
     // Add widgets to layouts
@@ -179,7 +179,7 @@ public class Window extends Application {
         for(int x = 0; x < 5; x++) {
             for(int y = 0; y < 5; y++) {
                 ImageView pic = new ImageView(new Image(Path.Parquet, 64, 64, false, false));
-                this.gp_floor.add(pic, x,y);
+                Window.gp_floor.add(pic, x,y);
             }
         }
         
@@ -189,8 +189,8 @@ public class Window extends Application {
             RowConstraints row = new RowConstraints(64);
             column.setHalignment(HPos.CENTER);
             row.setValignment(VPos.CENTER);
-            this.gp_robot.getColumnConstraints().add(column);
-            this.gp_robot.getRowConstraints().add(row);
+            Window.gp_robot.getColumnConstraints().add(column);
+            Window.gp_robot.getRowConstraints().add(row);
         }
         
         // Init Score
@@ -198,31 +198,31 @@ public class Window extends Application {
         for(int i = 0; i < 5; i++) {
             ColumnConstraints column = new ColumnConstraints(dim[i]);
             column.setHalignment(HPos.CENTER);
-            this.gp_score.getColumnConstraints().add(column);
+            Window.gp_score.getColumnConstraints().add(column);
         }
 
         // Score
-        this.gp_score.add(this.lb_battery, 0, 0);
-        this.gp_score.add(this.tt_battery, 0, 1);
-        this.gp_score.add(this.lb_all, 1, 1);
-        this.gp_score.add(this.lb_sucked, 1, 2);
-        this.gp_score.add(this.lb_picked, 1, 3);
-        this.gp_score.add(this.lb_dirt, 2, 0);
-        this.gp_score.add(this.tt_dirta, 2, 1);
-        this.gp_score.add(this.tt_dirts, 2, 2);
-        this.gp_score.add(this.lb_jewel, 3, 0);
-        this.gp_score.add(this.tt_jewela, 3, 1);
-        this.gp_score.add(this.tt_jewels, 3, 2);
-        this.gp_score.add(this.tt_jewelp, 3, 3);
-        this.gp_score.add(this.lb_score, 4, 0);
-        this.gp_score.add(this.tt_score, 4, 1);
+        Window.gp_score.add(this.lb_battery, 0, 0);
+        Window.gp_score.add(Window.tt_battery, 0, 1);
+        Window.gp_score.add(this.lb_all, 1, 1);
+        Window.gp_score.add(this.lb_sucked, 1, 2);
+        Window.gp_score.add(this.lb_picked, 1, 3);
+        Window.gp_score.add(this.lb_dirt, 2, 0);
+        Window.gp_score.add(Window.tt_dirta, 2, 1);
+        Window.gp_score.add(Window.tt_dirts, 2, 2);
+        Window.gp_score.add(this.lb_jewel, 3, 0);
+        Window.gp_score.add(Window.tt_jewela, 3, 1);
+        Window.gp_score.add(Window.tt_jewels, 3, 2);
+        Window.gp_score.add(Window.tt_jewelp, 3, 3);
+        Window.gp_score.add(this.lb_score, 4, 0);
+        Window.gp_score.add(Window.tt_score, 4, 1);
         //this.gp_score.add(this.cb_type, 1, 4, 2,1);
         //this.gp_score.add(this.cb_app, 3, 4, 3,1);
         
         // Pane Principal
         this.bp_all.setTop(this.sp_score);
         this.bp_all.setCenter(this.sp_plateau);
-        this.bp_all.setBottom(this.lv_travel);
+        this.bp_all.setBottom(Window.lv_travel);
     }
     
     // Add layouts to layouts
@@ -230,8 +230,8 @@ public class Window extends Application {
         // Add to principal pane
         this.ap_scene.getChildren().add(this.bp_all);
         // Add to StackPane
-        this.sp_score.getChildren().addAll(this.rt_score, this.gp_score);
-        this.sp_plateau.getChildren().addAll(this.gp_floor, this.gp_robot);
+        this.sp_score.getChildren().addAll(this.rt_score, Window.gp_score);
+        this.sp_plateau.getChildren().addAll(Window.gp_floor, Window.gp_robot);
     }
   
     public static void awaitFXToolkit() throws InterruptedException {
@@ -246,14 +246,14 @@ public class Window extends Application {
     // Add floor
     public void addFloor(int x, int y) {
         ImageView pic = new ImageView(new Image(Path.Parquet, 64, 64, false, false));
-        this.gp_floor.add(pic, x, y);
+        Window.gp_floor.add(pic, x, y);
     }
     
     // Add dirt in floor
     public static void addDirt(int x, int y) {
         ImageView pic = new ImageView(new Image(Path.Dirt, 50, 50, false, false));
         pic.setId("dirt");
-        Window.gp_floor.add(pic, x, y);
+        gp_floor.add(pic, x, y);
         GridPane.setHalignment(pic, HPos.CENTER);
     }
     
@@ -261,13 +261,13 @@ public class Window extends Application {
     public static void addJewel(int x, int y) {
         ImageView pic = new ImageView(new Image(Path.Jewel, 50, 50, false, false));
         pic.setId("jewel");
-        gp_floor.add(pic, x, y);
+        Window.gp_floor.add(pic, x, y);
         GridPane.setHalignment(pic, HPos.CENTER);
     }
     
     // Remove dirt in floor
     public static void removeDirt(int x, int y) {
-        for (Node node : Window.gp_floor.getChildren()) {
+        for (Node node : gp_floor.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node.getId() == "dirt") {
                 //System.out.println(node.getId());
             	Window.gp_floor.getChildren().remove(node);
@@ -281,7 +281,7 @@ public class Window extends Application {
         for (Node node : Window.gp_floor.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node.getId() == "jewel") {
                 System.out.println(node.getId());
-                this.gp_floor.getChildren().remove(node);
+                Window.gp_floor.getChildren().remove(node);
                 break;
             }
         }
@@ -296,7 +296,7 @@ public class Window extends Application {
     }
     
     // Get position robot
-    public int[] getPosRobot() {
+    public static int[] getPosRobot() {
         int x = GridPane.getColumnIndex(robot);
         int y = GridPane.getRowIndex(robot);
         int[] pos = {x, y};
@@ -304,27 +304,27 @@ public class Window extends Application {
     }
     
     // Move Robot
-    public void moveRobot(Direction dir) {
-        int[] pos = this.getPosRobot();
+    public static void moveRobot(Direction dir) {
+        int[] pos = getPosRobot();
         switch(dir) {
             case Top:
-                GridPane.setConstraints(this.robot, pos[0], pos[1]-1);
+                GridPane.setConstraints(Window.robot, pos[0], pos[1]-1);
                 break;
             case Left:
-                GridPane.setConstraints(this.robot, pos[0]-1, pos[1]);
+                GridPane.setConstraints(Window.robot, pos[0]-1, pos[1]);
                 break;
             case Down:
-                GridPane.setConstraints(this.robot, pos[0], pos[1]+1);
+                GridPane.setConstraints(Window.robot, pos[0], pos[1]+1);
                 break;
             case Right:
-                GridPane.setConstraints(this.robot, pos[0]+1, pos[1]);
+                GridPane.setConstraints(Window.robot, pos[0]+1, pos[1]);
                 break;
         }
     }
 
     // Set score {Battery, Dirt All, Dirt Sucked, Jewel All, Jewel Sucked, Jewel Picked, Score}
     public void setScore(int[] score) {
-        Text[] widText = {this.tt_battery,this.tt_dirta,this.tt_dirts,this.tt_jewela,this.tt_jewels,this.tt_jewelp,this.tt_score};
+        Text[] widText = {Window.tt_battery,Window.tt_dirta,Window.tt_dirts,Window.tt_jewela,Window.tt_jewels,Window.tt_jewelp,Window.tt_score};
         for(int i = 0; i < widText.length; i++) {
             String s = Integer.toString(score[i]);
             widText[i].setText(s);
@@ -338,7 +338,7 @@ public class Window extends Application {
     }
 
     public void p() {
-        for (Node node : this.gp_floor.getChildren()) {
+        for (Node node : Window.gp_floor.getChildren()) {
             System.out.println(node);
             System.out.println(GridPane.getColumnIndex(node));
             System.out.println(GridPane.getRowIndex(node));
@@ -362,7 +362,7 @@ public class Window extends Application {
         this.setScore(p);
         //this.initRobot(2, 2);
         //this.addJewel(1, 2);
-        this.addDirt(1, 2);
+        ///Window.addDirt(1, 2);
         //this.removeJewel(1, 2);
         //this.p();
     }

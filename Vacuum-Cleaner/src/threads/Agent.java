@@ -8,10 +8,8 @@ public class Agent extends Thread {
         super();
         
         // Sensor
-        this.sensors = {
-                environment:new EnvironmentSensor(),
-                position:new PositionSensor()
-        }
+
+
     }
 
     @Override

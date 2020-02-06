@@ -3,6 +3,7 @@ package threads;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
+import visual.Direction;
 import visual.Window;
 import java.util.concurrent.FutureTask;
 import javafx.application.Platform;
@@ -17,8 +18,9 @@ public class Environnement extends Thread {
     private int pickedJewels;
     private int suckedJewels;
     private List<String> events;
-    public static Window window;
+    public Window window;
     public Thread t;
+	private Window d;
 
     public Environnement() throws InterruptedException {
         super();
@@ -37,7 +39,7 @@ public class Environnement extends Thread {
         
         this.events = new ArrayList<String>();
         this.execWindow();
-        Window.addDirt(3, 2);
+        //Window.addDirt(0, 2);
     }
     
     private void execWindow() throws InterruptedException {
@@ -45,15 +47,16 @@ public class Environnement extends Thread {
         this.t = new Thread(() -> Application.launch(Window.class));
         //new Thread(() -> Application.launch(Window.class)).start();
         this.t.start();
-
+        this.d = (Window) this.window;
         Window.awaitFXToolkit();
+        Window.initRobot(4, 4);
         //this.window = new Window();
-        Window.addJewel(4, 4);
-        Window.printDirection("rrrrrrr");
-        Window.printDirection("rdfdfrrrrrr");
+        //Window.addJewel(4, 4);
+        //Window.printDirection("rrrrrrr");
+        //Window.printDirection("rdfdfrrrrrr");
     }
     private void generate() throws InterruptedException {
-    	TimeUnit.SECONDS.sleep(2);
+    	//TimeUnit.SECONDS.sleep(2);
     	double prob = Math.random();
         if (prob >= 0.10 && this.isGridFullOfDust() == false) {
             Random rand = new Random();
@@ -120,7 +123,7 @@ public class Environnement extends Thread {
         return this.grid;
     }
 
-    public void changeGridState(int x, int y, String keyword) {
+    public void changeGridState(int x, int y, String keyword) throws InterruptedException {
         // keywords : newDust -> +1, if dust already here does nothing
         // newJewel -> +2, if jewel already does nothing
         // suck -> check value, set it to 0, check if jewel was sucked.
@@ -130,13 +133,15 @@ public class Environnement extends Thread {
         if (keyword == "newDust" && (this.grid[x][y] != 1 || this.grid[x][y] != 3)) {
             this.dusts++;
             this.grid[x][y] += 1;
-            System.out.println("New dust at "+x+";"+y);
+            System.out.println("New dust at ("+x+";"+y+")");
+            Window.printDirection("New dust at ("+x+";"+y+")");
+            Window.moveRobot(Direction.Left);
             Window.addDirt(x, y);
         } else if (keyword == "newJewel" && (this.grid[x][y] != 2 || this.grid[x][y] != 3)) {
             this.jewels++;
             this.grid[x][y] += 2;
-            System.out.println("New jewel at "+x+";"+y);
-            Window.printDirection("New jewel at "+x+";"+y);
+            System.out.println("New jewel at ("+x+";"+y+")");
+            Window.printDirection("New jewel at ("+x+";"+y+")");
             Window.addJewel(x, y);
         } else if (keyword == "suck") {
             this.actions++;
