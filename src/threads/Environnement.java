@@ -1,6 +1,8 @@
 package threads;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Application;
 import visual.Direction;
 import visual.Window;
@@ -54,7 +56,7 @@ public class Environnement extends Thread {
         //Window.printDirection("rdfdfrrrrrr");
     }
     private void generate() throws InterruptedException {
-    	//TimeUnit.SECONDS.sleep(2);
+    	TimeUnit.SECONDS.sleep(2);
     	double prob = Math.random();
         if (prob >= 0.10 && this.isGridFullOfDust() == false) {
             Random rand = new Random();

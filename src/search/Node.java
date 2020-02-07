@@ -1,18 +1,41 @@
 package search;
 
 public class Node {
-    // keep these​​​​​​​​‌‌‌‌‌​​‌‌​​​​​​‌​‌​‌‌‌​ fields
-    Node left, right;
-    int value;
+	
+    private int data;
+    private Node left;
+    private Node right;
+	public int x;
+	public int y;
 
-    public Node find(int v){
-        if(v > this.value && this.right != null)
-            return right.find(v);
-        if(v < this.value && this.left != null)
-            return left.find(v);
-        if(this.value == v)
-            return this;
-        return null;
+    public Node(int element){
+        data = element;
+        left = null;
+        right = null;
+    }
+
+    public void setRightChild(Node n)
+    {
+        right = n;
+    }
+
+    public void setLeftChild(Node n){
+        left = n;
+    }
+
+    public Node getRightChild(){
+        return right;
+    }
+
+    public Node getLeftChild(){
+        return left;
+    }
+
+    public int getData(){
+        return data;
+    }
+
+    public void setData(int x){
+        data = x;
     }
 }
-
