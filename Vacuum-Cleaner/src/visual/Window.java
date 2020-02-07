@@ -277,7 +277,7 @@ public class Window extends Application {
     }
     
     // Remove jewel in floor
-    public static void removeJewel(int x, int y) {
+    public void removeJewel(int x, int y) {
         for (Node node : Window.gp_floor.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node.getId() == "jewel") {
                 System.out.println(node.getId());
@@ -323,7 +323,7 @@ public class Window extends Application {
     }
 
     // Set score {Battery, Dirt All, Dirt Sucked, Jewel All, Jewel Sucked, Jewel Picked, Score}
-    public static void setScore(int[] score) {
+    public void setScore(int[] score) {
         Text[] widText = {Window.tt_battery,Window.tt_dirta,Window.tt_dirts,Window.tt_jewela,Window.tt_jewels,Window.tt_jewelp,Window.tt_score};
         for(int i = 0; i < widText.length; i++) {
             String s = Integer.toString(score[i]);
