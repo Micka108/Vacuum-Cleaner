@@ -1,7 +1,6 @@
 package visual;
 
 public class Path {
-
 	public static String Battery = "resources/img/battery.png";
 	public static String CSS = "application.css";
 	public static String Dirt = "resources/img/dirt.png";

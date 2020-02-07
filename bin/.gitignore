@@ -1,4 +1,5 @@
-/resources/
-/visual/
-/threads/
 /App.class
+/node/
+/resources/
+/threads/
+/visual/

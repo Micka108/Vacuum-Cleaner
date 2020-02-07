@@ -1,6 +1,6 @@
 package visual;
 
-public enum Direction 	{
+public enum Direction {
 	  Top,
 	  Left,
 	  Down,

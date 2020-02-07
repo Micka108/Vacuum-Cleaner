@@ -1,6 +1,6 @@
+import threads.AgentSensors;
 import threads.Environnement;
 import visual.Window;
-import javafx.application.Application;
 
 public class App {
 	
