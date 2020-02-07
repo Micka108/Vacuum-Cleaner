@@ -1,4 +1,4 @@
-package node;
+package search;
 
 public class Node {
     // keep these​​​​​​​​‌‌‌‌‌​​‌‌​​​​​​‌​‌​‌‌‌​ fields
@@ -15,3 +15,4 @@ public class Node {
         return null;
     }
 }
+
