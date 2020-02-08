@@ -8,8 +8,8 @@ public class Node {
 	public int x;
 	public int y;
 
-    public Node(int element){
-        data = element;
+    public Node(){
+        data = 1;
         left = null;
         right = null;
     }

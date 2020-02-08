@@ -8,7 +8,15 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-		
+	
+	public void posValidation() {
+		if (this.x > 5 || this.x < 0) {
+			System.err.println("Error: We exit the grid through x");
+		}
+		if (this.y > 5 || this.y < 0) {
+			System.err.println("Error: We exit the grid through y");
+		}
+	}		
 	public int getX() {
 		return x;
 	}
@@ -21,4 +29,10 @@ public class Position {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	public int[] getPos() {
+		int[] pos = {x, y};
+		return pos;
+	}
+	
 }
