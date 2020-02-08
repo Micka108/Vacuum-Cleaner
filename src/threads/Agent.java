@@ -18,7 +18,7 @@ public class Agent extends Thread {
         AgentSensors sensors = new AgentSensors(x, y, new Environnement());
     }
 	
-	private Node BFS(Node start, ArrayList<Node> openSet, ArrayList<Node> closelSet) {
+	private Node BFS(Node start, ArrayList<Node> openSet, ArrayList<Node> closeSet) {
 		
 		openSet.add(start);
 		
@@ -31,9 +31,13 @@ public class Agent extends Thread {
 			ArrayList<Node> children = new ArrayList<Node>();
 			children = expand(current);
 			for (Node child: children) {
-				if (child )
+				if (openSet.contains(child) == false || closeSet.contains(child) == false) {
+					openSet.add(child);
+				}
 			}
+			closeSet.add(current);
 		}
+		return null;
 	}
 	
 	private Node[] expand(Node current) {
@@ -56,7 +60,7 @@ public class Agent extends Thread {
     public void run() {
         while(true){
     		ArrayList<Node> openSet = new ArrayList<Node>();
-    		ArrayList<Node> closelSet = new ArrayList<Node>();
+    		ArrayList<Node> closeSet = new ArrayList<Node>();
         }
     }
 
