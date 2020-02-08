@@ -106,8 +106,8 @@ public class Window extends Application {
         Window.tt_battery = new Text("0");
         Window.tt_score = new Text("0");
         
-        this.rb_explore = new RadioButton("BFS / A* Search");
-        this.rb_learning = new RadioButton("Apprentissage (Oui/Non)");
+        Window.rb_explore = new RadioButton("BFS / A* Search");
+        Window.rb_learning = new RadioButton("Apprentissage (Oui/Non)");
     }
     
     // Modify widgets
@@ -217,8 +217,8 @@ public class Window extends Application {
         Window.gp_score.add(Window.tt_jewelp, 3, 3);
         Window.gp_score.add(this.lb_score, 4, 0);
         Window.gp_score.add(Window.tt_score, 4, 1);
-        Window.gp_score.add(this.rb_explore, 0, 4, 2, 1);
-        Window.gp_score.add(this.rb_learning, 2, 4, 4, 1);
+        Window.gp_score.add(Window.rb_explore, 0, 4, 2, 1);
+        Window.gp_score.add(Window.rb_learning, 2, 4, 4, 1);
         
         // Pane Principal
         this.bp_all.setTop(this.sp_score);
