@@ -4,6 +4,7 @@ import java.lang.Math;
 import java.util.ArrayList;
 
 import search.Actions;
+import search.Desire;
 
 public class AgentSensors {
     public int x;
@@ -68,6 +69,16 @@ public class AgentSensors {
 			actions.add(Actions.Suck);
 		}
 		return actions;
+	}
+
+	//Observe the Environnement and chose the Desire to give to the Agent
+	public Desire observe(){
+		if(this.env.isGridEmpty()){
+			return Desire.SLEEP;
+		}
+		else{
+			return Desire.CLEAN;
+		}
 	}
     
 }

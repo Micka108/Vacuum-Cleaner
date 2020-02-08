@@ -23,6 +23,7 @@ public class Environnement extends Thread {
     private List<String> events;
     private Window window;
 
+
     public Environnement() throws InterruptedException {
         super();
         this.grid = new int[5][5];
@@ -113,20 +114,27 @@ public class Environnement extends Thread {
     }
 
     public int[][] getGrid() {
-        return this.grid;
+        return deepCopyOfGrid(this.grid);
     }
 
-    public void changeGridState(int x, int y, Actions keyword) throws InterruptedException {
+    public static int[][] deepCopyOfGrid(int[][] grid){
+        int[][] newGrid = new int[5][5];
+        for (int i = 0; i < 5; i++)
+            newGrid[i] = Arrays.copyOf(grid[i], 5);
+        return newGrid;
+    }
+
+    public boolean changeGridState(int x, int y, Actions keyword) throws InterruptedException {
         // keywords : newDust -> +1, if dust already here does nothing
         // newJewel -> +2, if jewel already does nothing
         // suck -> check value, set it to 0, check if jewel was sucked.
         // pick -> check value, -2 if jewel was here, otherwise nothing
-        // TO ADD : moves from the robot
+        // sleep -> agent is idle, decrease actions
         // ******************************************************************************************
         if (keyword == Actions.NewDust && (this.grid[x][y] != 1 || this.grid[x][y] != 3)) {
             this.dusts++;
             this.grid[x][y] += 1;
-            Window.printDirection("New dust at ("+x+";"+y+")");
+            //Window.printDirection("New dust at ("+x+";"+y+")");
             Platform.runLater(
                 () -> {
                     Window.addDirt(x, y);
@@ -135,7 +143,7 @@ public class Environnement extends Thread {
         } else if (keyword == Actions.NewJewel && (this.grid[x][y] != 2 || this.grid[x][y] != 3)) {
             this.jewels++;
             this.grid[x][y] += 2;
-            Window.printDirection("New jewel at ("+x+";"+y+")");
+            //Window.printDirection("New jewel at ("+x+";"+y+")");
             Platform.runLater(() -> {Window.addJewel(x, y);});
         } else if (keyword == Actions.Suck) {
             this.actions++;
@@ -149,6 +157,8 @@ public class Environnement extends Thread {
                         Window.removeJewel(x, y);
                     }
                 );
+                this.updateScore();
+                return true;
             } else if (this.grid[x][y] == 2) {
                 this.suckedJewels++;  	
                 this.grid[x][y] = 0;
@@ -157,6 +167,8 @@ public class Environnement extends Thread {
                         Window.removeJewel(x, y);
                     }
                 );
+                this.updateScore();
+                return true;
             } else if (this.grid[x][y] == 1) {
                 this.suckedDusts++;
                 this.grid[x][y] = 0;
@@ -165,6 +177,8 @@ public class Environnement extends Thread {
                         Window.removeDirt(x, y);
                     }
                 );
+                this.updateScore();
+                return true;
             }
         } else if (keyword == Actions.Pick) {
             this.actions++;
@@ -176,9 +190,56 @@ public class Environnement extends Thread {
                         Window.removeJewel(x, y);
                     }
                 );
+                this.updateScore();
+                return true;
             }
+        } else if (keyword == Actions.Sleep){
+            this.actions--;
         }
         this.updateScore();
+        return false;
+    }
+
+    //Get a set of position and a direction, return to the Agent his new position
+    public int[] moveAgentOnGrid(int x, int y, Actions keyword) throws InterruptedException {
+        if (keyword == Actions.MoveTop) {
+            this.actions++;
+            int[] newPos = {x,y-1};
+            Platform.runLater(
+                    () -> {
+                        Window.moveRobot(Direction.Top);
+                    }
+                );
+            return newPos;
+        } else if (keyword == Actions.MoveDown) {
+            this.actions++;
+            int[] newPos = {x,y+1};
+            Platform.runLater(
+                    () -> {
+                        Window.moveRobot(Direction.Down);
+                    }
+                );
+            return newPos;
+        } else if (keyword == Actions.MoveRight) {
+            this.actions++;
+            int[] newPos = {x+1,y};
+            Platform.runLater(
+                    () -> {
+                        Window.moveRobot(Direction.Right);
+                    }
+                );
+            return newPos;
+        } else if (keyword == Actions.MoveLeft) {
+            this.actions++;
+            int[] newPos = {x-1,y};
+            Platform.runLater(
+                    () -> {
+                        Window.moveRobot(Direction.Left);
+                    }
+                );
+            return newPos;
+        }
+        return null;
     }
 
     @Override
@@ -190,9 +251,10 @@ public class Environnement extends Thread {
 				// TODO Auto-generated catch block
                 //e1.printStackTrace();
                 ;
-			}
+            }
+            
             try {
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 //e.printStackTrace();
                 Thread.currentThread().interrupt();

@@ -8,5 +8,6 @@ public enum Actions {
       Suck,
       Pick,
       NewDust,
-      NewJewel
+      NewJewel,
+      Sleep
 }
