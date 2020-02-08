@@ -6,7 +6,7 @@ public class Agent extends Thread {
 
 	public Agent(int x, int y) throws InterruptedException{
         super();
-        //Sensor
+        //Sensors
         AgentSensors sensors = new AgentSensors(x, y, new Environnement());
     }
 
