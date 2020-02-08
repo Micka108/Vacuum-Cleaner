@@ -2,16 +2,12 @@ package threads;
 
 public class Agent extends Thread {
 
-    private Object sensors;
+    private AgentSensors sensors;
 
-	public Agent() throws InterruptedException{
+	public Agent(int x, int y) throws InterruptedException{
         super();
-        
-        
-       
-        
         //Sensor
-        AgentSensors sensors = new AgentSensors(2, 2, new Environnement());
+        AgentSensors sensors = new AgentSensors(x, y, new Environnement());
     }
 
     @Override

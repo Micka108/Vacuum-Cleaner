@@ -1,15 +1,19 @@
 package threads;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Application;
 import visual.Direction;
 import visual.Window;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+import search.Cell;
+import search.Actions;;
 
 public class Environnement extends Thread {
     private Stage stage ;
-	private int[][] grid; // values 0: empty, 1: dust, 2: jewel, 3:both
+	private int[][] grid	; // values 0: empty, 1: dust, 2: jewel, 3:both
     private int score;
     private int actions;
     private int dusts;
@@ -42,20 +46,12 @@ public class Environnement extends Thread {
     private void execWindow() throws InterruptedException {
     	this.window = ((Window) this.window);
         new Thread(() -> Application.launch(Window.class)).start();
-        //this.window = new Window();
-        //this.window = ((Window) this.window);
-        //this.stage = new Stage();
-        //Platform.runLater((Runnable) this.window);
-        //this.window.main(stage);
         Window.awaitFXToolkit();
         Window.initRobot(4, 4);
-        //Window.addJewel(4, 4);
-        Window.moveRobot(Direction.Left);
-        //Window.printDirection("rdfdfrrrrrr");
     }
+    
     private void generate() throws InterruptedException {
-    	//TimeUnit.SECONDS.sleep(2);
-    	double prob = Math.random();
+        double prob = Math.random();
         if (prob >= 0.10 && this.isGridFullOfDust() == false) {
             Random rand = new Random();
             int x;
@@ -64,7 +60,7 @@ public class Environnement extends Thread {
                 x = rand.nextInt(5);
                 y = rand.nextInt(5);
             } while (this.grid[x][y] == 1 || this.grid[x][y] == 3);
-            this.changeGridState(x, y, "newDust");
+            this.changeGridState(x, y, Actions.NewDust);
         } else if (prob < 0.10 && this.isGridFullOfJewels() == false) {
             Random rand = new Random();
             int x;
@@ -73,7 +69,7 @@ public class Environnement extends Thread {
                 x = rand.nextInt(5);
                 y = rand.nextInt(5);
             } while (this.grid[x][y] == 2 || this.grid[x][y] == 3);
-            this.changeGridState(x, y, "newJewel");
+            this.changeGridState(x, y, Actions.NewJewel);
         }
     }
 
@@ -82,7 +78,6 @@ public class Environnement extends Thread {
                 + (this.suckedJewels * -50);
         int[] scores = {this.actions, this.dusts, this.suckedDusts, this.jewels, this.suckedJewels, this.pickedJewels, this.score};
         Window.setScore(scores);
-        return;
     }
 
     public boolean isGridEmpty(){
@@ -99,7 +94,7 @@ public class Environnement extends Thread {
     private boolean isGridFullOfDust() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (this.grid[i][j] != 1 || this.grid[i][j] != 3) {
+                if (this.grid[i][j] == 0 || this.grid[i][j] == 2) {
                     return false;
                 }
             }
@@ -110,7 +105,7 @@ public class Environnement extends Thread {
     private boolean isGridFullOfJewels() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (this.grid[i][j] != 2 || this.grid[i][j] != 3) {
+                if (this.grid[i][j] == 0 || this.grid[i][j] == 1) {
                     return false;
                 }
             }
@@ -122,14 +117,14 @@ public class Environnement extends Thread {
         return this.grid;
     }
 
-    public void changeGridState(int x, int y, String keyword) throws InterruptedException {
+    public void changeGridState(int x, int y, Actions keyword) throws InterruptedException {
         // keywords : newDust -> +1, if dust already here does nothing
         // newJewel -> +2, if jewel already does nothing
         // suck -> check value, set it to 0, check if jewel was sucked.
         // pick -> check value, -2 if jewel was here, otherwise nothing
         // TO ADD : moves from the robot
         // ******************************************************************************************
-        if (keyword == "newDust" && (this.grid[x][y] != 1 || this.grid[x][y] != 3)) {
+        if (keyword == Actions.NewDust && (this.grid[x][y] != 1 || this.grid[x][y] != 3)) {
             this.dusts++;
             this.grid[x][y] += 1;
             Window.printDirection("New dust at ("+x+";"+y+")");
@@ -138,12 +133,12 @@ public class Environnement extends Thread {
                     Window.addDirt(x, y);
                 }
             );
-        } else if (keyword == "newJewel" && (this.grid[x][y] != 2 || this.grid[x][y] != 3)) {
+        } else if (keyword == Actions.NewJewel && (this.grid[x][y] != 2 || this.grid[x][y] != 3)) {
             this.jewels++;
             this.grid[x][y] += 2;
             Window.printDirection("New jewel at ("+x+";"+y+")");
             Platform.runLater(() -> {Window.addJewel(x, y);});
-        } else if (keyword == "suck") {
+        } else if (keyword == Actions.Suck) {
             this.actions++;
             if (this.grid[x][y] == 3) {
                 this.suckedDusts++;
@@ -172,7 +167,7 @@ public class Environnement extends Thread {
                     }
                 );
             }
-        } else if (keyword == "pick") {
+        } else if (keyword == Actions.Pick) {
             this.actions++;
             if (this.grid[x][y] == 2 || this.grid[x][y] == 3) {
                 this.pickedJewels++;
