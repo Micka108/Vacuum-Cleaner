@@ -58,6 +58,9 @@ public class Agent extends Thread {
 	
 
 	private Node Astar() {
+		
+		
+		
 		return null;
 		
 	}
@@ -112,6 +115,7 @@ public class Agent extends Thread {
         return intentions;
     }
 
+
     @Override
     public void run() {
         while(true){
@@ -155,7 +159,5 @@ public class Agent extends Thread {
                 }
             }
         }
-    }
-
-    
+    }    
 }

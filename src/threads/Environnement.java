@@ -22,6 +22,7 @@ public class Environnement extends Thread {
     private int suckedJewels;
     private List<String> events;
     private Window window;
+	private Thread t;
 
 
     public Environnement() throws InterruptedException {
@@ -45,9 +46,13 @@ public class Environnement extends Thread {
     
     private void execWindow() throws InterruptedException {
     	this.window = ((Window) this.window);
-        new Thread(() -> Application.launch(Window.class)).start();
+        this.t = new Thread(() -> Application.launch(Window.class));
+        this.t.start();
+        //this.t.run();
+
         Window.awaitFXToolkit();
         Window.initRobot(4, 4);
+        //this.window.p();
     }
     
     private void generate() throws InterruptedException {

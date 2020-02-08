@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 //import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -66,8 +67,8 @@ public class Window extends Application {
     private static ImageView robot;
     
     private static int incView = 1;
-    //private ChoiceBox<String> cb_type;
-   // private ChoiceBox<String> cb_app;
+    private static RadioButton rb_explore;
+    private static RadioButton rb_learning;
 
     private static final CountDownLatch latch = new CountDownLatch(1);
     
@@ -105,8 +106,8 @@ public class Window extends Application {
         Window.tt_battery = new Text("0");
         Window.tt_score = new Text("0");
         
-        //this.cb_type = new ChoiceBox<String>(FXCollections.observableArrayList("Formelle", "Informelle"));
-        //this.cb_app = new ChoiceBox<String>(FXCollections.observableArrayList("Apprentissage", "Sans"));
+        Window.rb_explore = new RadioButton("BFS / A* Search");
+        Window.rb_learning = new RadioButton("Apprentissage (Oui/Non)");
     }
     
     // Modify widgets
@@ -152,11 +153,11 @@ public class Window extends Application {
         Window.gp_score.setPadding(new Insets(20));
 
         // Modify BorderPane
-        this.bp_all.setLayoutX(20);
+        this.bp_all.setLayoutX(10);
         this.bp_all.setLayoutY(10);
         
         // Modify AnchorPane
-        BackgroundImage BI = new BackgroundImage(new Image(Path.Manor, 1080,728, false, false), 
+        BackgroundImage BI = new BackgroundImage(new Image(Path.Manor, 780,780, false, false), 
                 BackgroundRepeat.NO_REPEAT, 
                 BackgroundRepeat.NO_REPEAT, 
                 BackgroundPosition.CENTER,
@@ -216,8 +217,8 @@ public class Window extends Application {
         Window.gp_score.add(Window.tt_jewelp, 3, 3);
         Window.gp_score.add(this.lb_score, 4, 0);
         Window.gp_score.add(Window.tt_score, 4, 1);
-        //this.gp_score.add(this.cb_type, 1, 4, 2,1);
-        //this.gp_score.add(this.cb_app, 3, 4, 3,1);
+        Window.gp_score.add(Window.rb_explore, 0, 4, 2, 1);
+        Window.gp_score.add(Window.rb_learning, 2, 4, 4, 1);
         
         // Pane Principal
         this.bp_all.setTop(this.sp_score);
@@ -297,6 +298,16 @@ public class Window extends Application {
         return pos;
     }
     
+    public static boolean getExplore() {
+    	boolean bool = Window.rb_explore.isSelected();
+		return bool;
+    }
+    
+    public static boolean getLearning() {
+    	boolean bool = Window.rb_learning.isSelected();
+		return bool;
+    }
+    
     // Move Robot
     public static void moveRobot(Direction dir) {
         int[] pos = getPosRobot();
@@ -351,7 +362,7 @@ public class Window extends Application {
         stage.setTitle("Vacuum-Cleaner");
         stage.show();
     }
-
+    
     /*public static void main(String[] args) {
         launch(args);
     }*/
