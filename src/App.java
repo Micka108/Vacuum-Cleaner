@@ -4,12 +4,13 @@ import visual.Window;
 
 public class App {
 	
-	Window Window = new Window();
+	static AgentSensors ap;
 	
     public static void main(String[] args) throws Exception {
         System.out.println("Starting");
         Environnement env = new Environnement(); //creating and starting the Environnement Thread
         env.start();
+        //ap.heuristic();
         //Application.launch(Window.class, args);
     }
 }

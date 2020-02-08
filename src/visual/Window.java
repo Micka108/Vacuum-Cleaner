@@ -356,15 +356,6 @@ public class Window extends Application {
         stage.setResizable(false);
         stage.setTitle("Vacuum-Cleaner");
         stage.show();
-        
-        // Test
-        int[] p = {1,25,2,3,4,5,3};
-        this.setScore(p);
-        //this.initRobot(2, 2);
-        //this.addJewel(1, 2);
-        ///Window.addDirt(1, 2);
-        //this.removeJewel(1, 2);
-        //this.p();
     }
 
     /*public static void main(String[] args) {
