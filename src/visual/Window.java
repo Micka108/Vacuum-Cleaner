@@ -243,12 +243,6 @@ public class Window extends Application {
         latch.countDown();
     }
     
-    // Add floor
-    public void addFloor(int x, int y) {
-        ImageView pic = new ImageView(new Image(Path.Parquet, 64, 64, false, false));
-        Window.gp_floor.add(pic, x, y);
-    }
-    
     // Add dirt in floor
     public static void addDirt(int x, int y) {
         ImageView pic = new ImageView(new Image(Path.Dirt, 50, 50, false, false));
