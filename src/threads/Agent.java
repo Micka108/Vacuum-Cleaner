@@ -1,5 +1,9 @@
 package threads;
 
+import java.util.ArrayList;
+
+import search.Node;
+
 public class Agent extends Thread {
 
     private AgentSensors sensors;

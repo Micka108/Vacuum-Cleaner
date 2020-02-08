@@ -8,7 +8,6 @@ import visual.Direction;
 import visual.Window;
 import javafx.stage.Stage;
 import javafx.application.Platform;
-import search.Cell;
 import search.Actions;;
 
 public class Environnement extends Thread {
