@@ -18,17 +18,27 @@ public class Agent extends Thread {
         AgentSensors sensors = new AgentSensors(x, y, new Environnement());
     }
 	
-	private void BFS(Node start, ArrayList<Node> openSet, ArrayList<Node> closelSet) {
+	private Node BFS(Node start, ArrayList<Node> openSet, ArrayList<Node> closelSet) {
 		
 		openSet.add(start);
 		
 		while (openSet.isEmpty() == false) {
 			Node current = openSet.get(0);
 			openSet.remove(0);
-			if (goal(current.gridState) == true);
+			if (goal(current.gridState) == true) {
+				return current;
+			}
+			ArrayList<Node> children = new ArrayList<Node>();
+			children = expand(current);
+			for (Node child: children) {
+				if (child )
+			}
 		}
 	}
 	
+	private Node[] expand(Node current) {
+		
+	}
 	
 	private boolean goal(int[][] gridState) {
         for (int i = 0; i < 5; i++) {
