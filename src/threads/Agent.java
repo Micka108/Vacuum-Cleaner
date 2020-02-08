@@ -40,6 +40,10 @@ public class Agent extends Thread {
 		return null;
 	}
 	
+	private Node Astar() {
+		
+	}
+	
 	private Node[] expand(Node current) {
 		
 	}
