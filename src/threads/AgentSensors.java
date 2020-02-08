@@ -22,14 +22,30 @@ public class AgentSensors {
 	}
 
     // Manhattan distance
-    public int heuristic(int x, int y, int xGoal, int yGoal) {
+    private int heuristic(int x, int y, int xGoal, int yGoal) {
     	int dx = Math.abs(x - xGoal);
     	int dy = Math.abs(y - yGoal);
 		return dx + dy;
-    }
+	}
+	
+	public int closestElement(int x, int y, int[][] gridState){
+		if(gridState[x][y] != 0){
+			return 0;
+		}
+		int minDist = 999;
+		for(int i = 0; i < 5; i++){
+			for(int j = 0; j < 5; j++){
+				int temp = heuristic(x, y, i, j);
+				if(temp < minDist){
+					minDist = temp;
+				}
+			}
+		}
+		return minDist;
+	}
     
     //methode pour savoir toutes les actions disponibles selon la case actuelle
-    public ArrayList<Actions> availableActions(){
+    public ArrayList<Actions> availableActions(int[][] gridState){
 		ArrayList<Actions> actions = new ArrayList<Actions>();
 		//Do not get out of boundaries
 		if(this.x != 0){
@@ -45,11 +61,10 @@ public class AgentSensors {
 			actions.add(Actions.MoveDown);
 		}
 		//check grid state to know if Sucking action or Picking action is needed
-		int[][] grid = this.env.getGrid();
-		if(grid[this.x][this.y] == 2 || grid[this.x][this.y] == 3){
+		if(gridState[this.x][this.y] == 2 || gridState[this.x][this.y] == 3){
 			actions.add(Actions.Pick);
 		}
-		if(grid[this.x][this.y] == 1 || grid[this.x][this.y] == 3){
+		if(gridState[this.x][this.y] == 1 || gridState[this.x][this.y] == 3){
 			actions.add(Actions.Suck);
 		}
 		return actions;
