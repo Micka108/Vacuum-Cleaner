@@ -42,6 +42,9 @@ public class Agent extends Thread {
 	
 
 	private Node Astar() {
+		
+		
+		
 		return null;
 		
 	}
@@ -89,7 +92,6 @@ public class Agent extends Thread {
             }
         }
 		return true;
-		
 	}
 
     @Override
@@ -97,6 +99,8 @@ public class Agent extends Thread {
         while(true){
     		ArrayList<Node> openSet = new ArrayList<Node>();
     		ArrayList<Node> closeSet = new ArrayList<Node>();
+    		
+    		
         }
     }
 

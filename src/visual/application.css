@@ -1,5 +1,9 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
+AnchorPane {
+	/*-fx-background-color: #696969 ;*/
+}
+
 GridPane {
 	-fx-alignment: center;
 	-fx-grid-lines-visible: true;
@@ -15,12 +19,16 @@ Label {
 	-fx-text-fill:white ;
 }
 
-Text {
-	-fx-fill:white ;
+ListView {
+	-fx-control-inner-background:#000000; 
 }
 
-AnchorPane {
-	-fx-background-color: #696969 ;
+Text {
+	-fx-fill: white;
+}
+
+RadioButton {
+	-fx-text-fill: white;
 }
 	
 TextArea {
@@ -31,20 +39,12 @@ TextArea {
 	-fx-text-fill: #00ff00;
 }
  
-ListView {
-	-fx-control-inner-background:#000000; 
-}
 
 .items {
 	-fx-control-inner-background:#000000; 
 	-fx-font-family: Consolas; 
 	-fx-text-fill: #00ff00;
 }
-
-Cell {
-	-fx-skin:null;
-}
- 
  
 .stage {
   -fx-border-insets: 23;
