@@ -1,9 +1,9 @@
 package threads;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
+import search.Actions;
 import search.Node;
 
 public class Agent extends Thread {
@@ -36,8 +36,38 @@ public class Agent extends Thread {
 		}
 	}
 	
-	private Node[] expand(Node current) {
-		
+	private ArrayList<Node> expand(Node current) {
+        ArrayList<Actions> actions = this.sensors.availableActions(current.x, current.y, current.gridState);
+        ArrayList<Node> children = new ArrayList<Node>();
+        Node temp;
+        int[][] tempGrid;
+        for(Actions a: actions){
+            switch(a){
+                case MoveTop:
+                    temp = new Node(current.x, current.y -1, current.gridState, current, 0, 0, a);
+                    children.add(temp);
+                case MoveDown:
+                    temp = new Node(current.x, current.y +1, current.gridState, current, 0, 0, a);
+                    children.add(temp);
+                case MoveRight:
+                    temp = new Node(current.x +1, current.y, current.gridState, current, 0, 0, a);
+                    children.add(temp);
+                case MoveLeft:
+                    temp = new Node(current.x -1, current.y, current.gridState, current, 0, 0, a);
+                    children.add(temp);
+                case Suck:
+                    tempGrid = current.gridState;
+                    tempGrid[current.x][current.y] = 0;
+                    temp = new Node(current.x, current.y, tempGrid, current, 0, 0, a);
+                    children.add(temp);
+                case Pick:
+                    tempGrid = current.gridState;
+                    tempGrid[current.x][current.y] -= 2;
+                    temp = new Node(current.x, current.y, tempGrid, current, 0, 0, a);
+                    children.add(temp);
+            }
+        }
+        return children;
 	}
 	
 	private boolean goal(int[][] gridState) {
