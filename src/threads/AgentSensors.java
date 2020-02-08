@@ -45,26 +45,26 @@ public class AgentSensors {
 	}
     
     //methode pour savoir toutes les actions disponibles selon la case actuelle
-    public ArrayList<Actions> availableActions(int[][] gridState){
+    public ArrayList<Actions> availableActions(int x, int y, int[][] gridState){
 		ArrayList<Actions> actions = new ArrayList<Actions>();
 		//Do not get out of boundaries
-		if(this.x != 0){
+		if(x != 0){
 			actions.add(Actions.MoveLeft);
 		}
-		if(this.y != 0){
+		if(y != 0){
 			actions.add(Actions.MoveTop);
 		}
-		if(this.x != 4){
+		if(x != 4){
 			actions.add(Actions.MoveRight);
 		}
-		if(this.y != 4){
+		if(y != 4){
 			actions.add(Actions.MoveDown);
 		}
 		//check grid state to know if Sucking action or Picking action is needed
-		if(gridState[this.x][this.y] == 2 || gridState[this.x][this.y] == 3){
+		if(gridState[x][y] == 2 || gridState[x][y] == 3){
 			actions.add(Actions.Pick);
 		}
-		if(gridState[this.x][this.y] == 1 || gridState[this.x][this.y] == 3){
+		if(gridState[x][y] == 1 || gridState[x][y] == 3){
 			actions.add(Actions.Suck);
 		}
 		return actions;
