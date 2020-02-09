@@ -139,17 +139,19 @@ public class Environnement extends Thread {
         if (keyword == Actions.NewDust && (this.grid[x][y] != 1 || this.grid[x][y] != 3)) {
             this.dusts++;
             this.grid[x][y] += 1;
-            //Window.printDirection("New dust at ("+x+";"+y+")");
             Platform.runLater(
                 () -> {
+                    Window.printDirection("New dust at ("+x+";"+y+")");
                     Window.addDirt(x, y);
                 }
             );
         } else if (keyword == Actions.NewJewel && (this.grid[x][y] != 2 || this.grid[x][y] != 3)) {
             this.jewels++;
             this.grid[x][y] += 2;
-            //Window.printDirection("New jewel at ("+x+";"+y+")");
-            Platform.runLater(() -> {Window.addJewel(x, y);});
+            Platform.runLater(() -> {
+                Window.printDirection("New jewel at ("+x+";"+y+")");
+                Window.addJewel(x, y);
+            });
         } else if (keyword == Actions.Suck) {
             this.actions++;
             if (this.grid[x][y] == 3) {
@@ -259,7 +261,7 @@ public class Environnement extends Thread {
             }
             
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 //e.printStackTrace();
                 Thread.currentThread().interrupt();
