@@ -198,7 +198,6 @@ public class Agent extends Thread {
                 this.intentions = this.rebuildActions(goal, closeSet);
                 Window.printDirection("Intentions :"+intentions.toString());
                     
-                }
                 while(!this.intentions.isEmpty() && !this.explore){
                     Actions action = this.intentions.pop();
                     this.explore = this.effectors.doAction(action);
@@ -214,3 +213,4 @@ public class Agent extends Thread {
         }
     }    
 }
+
