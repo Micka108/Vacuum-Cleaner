@@ -7,7 +7,6 @@ import java.util.Stack;
 
 import search.Actions;
 import search.Node;
-import search.StackReversal;
 import visual.Window;
 import search.Desire;
 
@@ -19,7 +18,6 @@ public class Agent extends Thread {
     public AgentSensors sensors;
     //Agent's Effectors
     private AgentEffectors effectors;
-    private boolean informed;
     //Agent's Desire :
     //SLEEP if the grid is clean
     //CLEAN to start working and launch exploration, to create our intentions list : Actions to give to its Effectors
@@ -31,7 +29,6 @@ public class Agent extends Thread {
 
 	public Agent(int x, int y, Environnement env) throws InterruptedException{
         super();
-        this.informed = false;
         this.explore = true;
         //Sensors
         this.sensors = new AgentSensors(x, y, env);
@@ -183,22 +180,23 @@ public class Agent extends Thread {
             else if(this.desire == Desire.CLEAN && this.explore){
                 //Explore() : choose between BFS and A* and retrieve a list of Nodes
                 //to create a list of Actions to send to its Effectors
-                if(!this.informed){
-                    ArrayList<Node> openSet = new ArrayList<Node>();
-                    ArrayList<Node> closeSet = new ArrayList<Node>();
-                    Node goal;
+                ArrayList<Node> openSet = new ArrayList<Node>();
+                ArrayList<Node> closeSet = new ArrayList<Node>();
+                Node goal;
 
+                if(!Window.getExplore()){
                     //BFS
-                    //Node start = new Node(this.sensors.x, this.sensors.y, this.sensors.env.getGrid(), null, 0, 0, null);
-                    //goal = this.BFS(start, openSet, closeSet);
-
+                    Node start = new Node(this.sensors.x, this.sensors.y, this.sensors.env.getGrid(), null, 0, 0, null);
+                    goal = this.BFS(start, openSet, closeSet);
+                }
+                else{
                     //A*
                     Node start = new Node(this.sensors.x, this.sensors.y, this.sensors.env.getGrid(), null, 0, this.sensors.closestElement(this.sensors.x, this.sensors.y, this.sensors.env.getGrid()), null);
                     goal = this.Astar(start, openSet, closeSet);
-
-                    this.explore = false;
-                    this.intentions = this.rebuildActions(goal, closeSet);
-                    Window.printDirection("Intentions :"+intentions.toString());
+                }
+                this.explore = false;
+                this.intentions = this.rebuildActions(goal, closeSet);
+                Window.printDirection("Intentions :"+intentions.toString());
                     
                 }
                 while(!this.intentions.isEmpty() && !this.explore){
