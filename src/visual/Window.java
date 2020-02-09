@@ -72,6 +72,8 @@ public class Window extends Application {
 
     private static final CountDownLatch latch = new CountDownLatch(1);
     
+    private static boolean closed;
+    
     
     // Init interface
     public Window(){
@@ -341,6 +343,10 @@ public class Window extends Application {
         items.add(incView + ": " + dir);
         incView++;
     }
+    
+    public static boolean getClose() {
+    	return closed;
+    }
 
     public void p() {
         for (Node node : Window.gp_floor.getChildren()) {
@@ -352,13 +358,12 @@ public class Window extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-    	//Stage stage = new Stage();
         Scene scene = new Scene(this.ap_scene,500,800);
         scene.getStylesheets().add(getClass().getResource(Path.CSS).toExternalForm());
-        //scene.
         stage.getIcons().add(new Image(Path.VacuumCleaner));
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.setOnCloseRequest(e -> closed = true);
         stage.setTitle("Vacuum-Cleaner");
         stage.show();
     }
