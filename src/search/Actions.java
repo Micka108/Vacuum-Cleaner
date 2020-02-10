@@ -1,9 +1,9 @@
 package search;
 
 public enum Actions {
-	  MoveTop,
-	  MoveLeft,
-	  MoveDown,
+	MoveTop,
+	MoveLeft,
+	MoveDown,
       MoveRight,
       Suck,
       Pick,

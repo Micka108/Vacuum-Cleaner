@@ -1,7 +1,6 @@
 package threads;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import visual.Direction;
@@ -53,6 +52,10 @@ public class Environnement extends Thread {
         Window.awaitFXToolkit();
         Window.initRobot(4, 4);
         //this.window.p();
+    }
+
+    public int getScore(){
+        return this.score;
     }
     
     private void generate() throws InterruptedException {

@@ -3,11 +3,14 @@ package threads;
 import java.util.Stack;
 
 import search.Actions;
+import search.Learning;
+import visual.Window;
 
 public class AgentEffectors {
     private Environnement env;
     public Stack<Actions> intentions;
     private Agent agent;
+    public Learning learner;
 
     public AgentEffectors(Environnement env, Agent agent) {
         super();
@@ -16,6 +19,7 @@ public class AgentEffectors {
         //Initiate the intentions to Sleep until we have real intentions
         this.intentions = new Stack<Actions>();
         this.intentions.push(Actions.Sleep);
+        this.learner = new Learning(this.env);
     }
 
     public boolean doAction(Actions action) {
@@ -39,6 +43,9 @@ public class AgentEffectors {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if(Window.getLearning()){
+                    return learner.nextStep();
+                }
                 return false;
             }
             else{
@@ -50,6 +57,15 @@ public class AgentEffectors {
                 }
                 //the changeGridState method will return a boolean to tell
                 //the effectors that an item has been picked/sucked, so the effectors can tell the agent to restart an exploration
+                if(Window.getLearning()){
+                    if(event){
+                        learner.reset();
+                        return event;
+                    }
+                    else{
+                        return learner.nextStep();
+                    }
+                }
                 return event;
             }
         }

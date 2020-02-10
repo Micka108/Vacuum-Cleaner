@@ -8,7 +8,7 @@ import search.Actions;
 import search.Node;
 import visual.Window;
 import search.Desire;
-
+import search.Learning;
 import javafx.application.Platform;
 
 public class Agent extends Thread {
@@ -177,6 +177,9 @@ public class Agent extends Thread {
                 }
             }
             else if(this.desire == Desire.CLEAN && this.explore){
+                if(Window.getLearning()){
+                    this.effectors.learner.reset();
+                }
                 //Explore() : choose between BFS and A* and retrieve a list of Nodes
                 //to create a list of Actions to send to its Effectors
                 ArrayList<Node> openSet = new ArrayList<Node>();
@@ -195,7 +198,7 @@ public class Agent extends Thread {
                 }
                 this.explore = false;
                 this.intentions = this.rebuildActions(goal, closeSet);
-                Window.printDirection("Intentions :"+intentions.toString());
+                //Window.printDirection("Intentions :"+intentions.toString());
                     
                 while(!this.intentions.isEmpty() && !this.explore){
                     Actions action = this.intentions.pop();
