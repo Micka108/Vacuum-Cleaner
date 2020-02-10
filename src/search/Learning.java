@@ -54,11 +54,13 @@ public class Learning {
     //We also reset it each time a element is picked/sucked.
     public void reset() {
         int scoreDiff = this.env.getScore() - this.startScore;
-        try{
-            this.addNewScore(this.steps, scoreDiff);
-        }
-        catch(Exception e){
-            e.printStackTrace();
+        if(this.steps != 0){
+            try{
+                this.addNewScore(this.steps, scoreDiff);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
         this.steps = 0;
         this.startScore = this.env.getScore();
@@ -74,7 +76,7 @@ public class Learning {
 
     private void addNewScore(int steps, int score) throws Exception {
         Platform.runLater(() -> {
-            Window.printDirection("With " + steps + " steps, score changed :" + score);
+            Window.printDirection("With " + steps + " steps, score changed : " + score);
         });
         FileReader reader = new FileReader("src/search/learning.json");
         JSONParser jsonParser = new JSONParser();

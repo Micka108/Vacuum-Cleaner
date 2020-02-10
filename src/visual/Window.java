@@ -277,7 +277,6 @@ public class Window extends Application {
     public static void removeJewel(int x, int y) {
         for (Node node : Window.gp_floor.getChildren()) {
             if (node instanceof ImageView && GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y && node.getId() == "jewel") {
-                System.out.println(node.getId());
                 Window.gp_floor.getChildren().remove(node);
                 break;
             }
