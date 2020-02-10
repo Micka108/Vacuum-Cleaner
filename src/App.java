@@ -1,7 +1,6 @@
 import threads.Agent;
 import threads.AgentSensors;
 import threads.Environnement;
-import visual.Window;
 
 public class App {
 	
