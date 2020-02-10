@@ -1,15 +1,11 @@
 package search;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import javafx.application.Platform;
 
@@ -24,11 +20,15 @@ public class Learning {
     private Environnement env;
 
     public Learning(Environnement env) {
+        //Setting up the learning values
         this.steps = 0;
         this.env = env;
         this.startScore = this.env.getScore();
+        this.newMaxSteps();
     }
 
+    //Increase the current steps done, and if the target is reached,
+    //saves the iteration and start the next one
     public boolean nextStep() {
         this.steps++;
         if (this.steps == this.maxSteps) {
@@ -39,15 +39,35 @@ public class Learning {
             catch(Exception e){
                 e.printStackTrace();
             }
-            // plus tard changer pour meilleur moyenne (avec 50% de changer, 50% de chance
-            // de +1 -1)
-            Random rand = new Random();
-            this.maxSteps = rand.nextInt(7)+1; // between 3 and 7
+            this.newMaxSteps();
             this.steps = 0;
             this.startScore = this.env.getScore();
             return true;
         }
         return false;
+    }
+
+    private void newMaxSteps(){
+        double prob = Math.random();
+        //we take the best value of steps, calculated on previous iterations.
+        //but half of the time we either reduce or increase the value to try new configurations
+        try{
+            if(prob >= 0.3){
+                if(prob < 0.15){
+                    this.maxSteps = this.getBestMean() +1;
+                }
+                else{
+                    this.maxSteps = this.getBestMean() -1;
+                }
+            }
+            else{
+                this.maxSteps = this.getBestMean();
+                
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        } 
     }
 
     //We reset the learner each time we start an exploration (i.e. when we get out of state SLEEP)
@@ -66,14 +86,16 @@ public class Learning {
         this.startScore = this.env.getScore();
     }
 
-    private int mean(JSONArray values) {
-        int result = 0;
+    //Calculate mean of given values
+    private long mean(JSONArray values) {
+        long result = 0;
         for (int i = 0; i < values.size(); i++) {
-            result += (int) values.get(i);
+            result += (long) values.get(i);
         }
         return result / values.size();
     }
 
+    //Add the new score change in the right Array (key is number of steps) in the .json file
     private void addNewScore(int steps, int score) throws Exception {
         Platform.runLater(() -> {
             Window.printDirection("With " + steps + " steps, score changed : " + score);
@@ -89,15 +111,16 @@ public class Learning {
         file.flush();
     }
 
+    //Chose the best number of steps depending on the values of previous iterations
     private int getBestMean() throws Exception {
-        int bestMean = -9999;
+        long bestMean = -9999;
         int bestSteps = 0;
         FileReader reader = new FileReader("src/search/learning.json");
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
         for(int i = 3; i<8; i++){
             JSONArray jsonArray = (JSONArray) jsonObject.get(Integer.toString(i));
-            int mean = this.mean(jsonArray);
+            long mean = this.mean(jsonArray);
             if(mean > bestMean){
                 bestMean = mean;
                 bestSteps = i;

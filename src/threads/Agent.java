@@ -26,18 +26,20 @@ public class Agent extends Thread {
     //Agent's intentions
     private Stack<Actions> intentions;
 
+    //Constructor
 	public Agent(int x, int y, Environnement env) throws InterruptedException{
         super();
         this.explore = true;
         //Sensors
         this.sensors = new AgentSensors(x, y, env);
+        //Effectors
         this.effectors = new AgentEffectors(env, this);
     }
-	
+    
+    //BFS exploration
 	private Node BFS(Node start, ArrayList<Node> openSet, ArrayList<Node> closeSet) {
-		
-		openSet.add(start);
-		
+        openSet.add(start);
+        //Looping until the goal is achieved or the openSet in empty 
 		while (openSet.isEmpty() == false) {
 			Node current = openSet.get(0);
 			openSet.remove(0);
@@ -47,6 +49,7 @@ public class Agent extends Thread {
 			ArrayList<Node> children = new ArrayList<Node>();
             children = expand(current);
 			for (Node child: children) {
+                //prevent loops in the tree
 				if (openSet.contains(child) == false && closeSet.contains(child) == false) {
 					openSet.add(child);
 				}
@@ -57,9 +60,9 @@ public class Agent extends Thread {
 	}
 	
 
+    //A* exploration : same than BFS method, only sorting the openSet depending on heuristic
 	private Node Astar(Node start, ArrayList<Node> openSet, ArrayList<Node> closeSet) {
 		openSet.add(start);
-		
 		while (openSet.isEmpty() == false) {
             //sort OpenSet depending on heuristic
             Collections.sort(openSet, (node1, node2) -> node1.f - node2.f);
@@ -81,7 +84,9 @@ public class Agent extends Thread {
 		return null;
 		
 	}
-	
+    
+    //Basic expand method: creates children Nodes depending on the state of the grid for the Parent Node,
+    // the Agent position, and the possible actions in this state.
 	private ArrayList<Node> expand(Node current) {
         ArrayList<Actions> actions = this.sensors.availableActions(current.x, current.y, Environnement.deepCopyOfGrid(current.gridState));
         ArrayList<Node> children = new ArrayList<Node>();
@@ -110,6 +115,7 @@ public class Agent extends Thread {
         return children;
     }
     
+    //Same than previous method, only taking heuristic in account
     private ArrayList<Node> expandAStar(Node current) {
         ArrayList<Actions> actions = this.sensors.availableActions(current.x, current.y, Environnement.deepCopyOfGrid(current.gridState));
         ArrayList<Node> children = new ArrayList<Node>();
@@ -137,7 +143,8 @@ public class Agent extends Thread {
         }
         return children;
 	}
-	
+    
+    //Check if the Grid given by the Node is our goal : a clean Grid
 	private boolean goal(int[][] gridState) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -149,6 +156,8 @@ public class Agent extends Thread {
 		return true;
     }
     
+    //Takes all explored Nodes and the goal Node to rebuild the track of Actions
+    //Return the result as a Stack (LIFO)
     private Stack<Actions> rebuildActions(Node goal, ArrayList<Node> closedSet){
         Stack<Actions> intentions = new Stack<Actions>();
         intentions.push(goal.action);

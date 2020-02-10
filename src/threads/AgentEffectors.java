@@ -12,6 +12,7 @@ public class AgentEffectors {
     private Agent agent;
     public Learning learner;
 
+    //Constructor
     public AgentEffectors(Environnement env, Agent agent) {
         super();
         this.env = env;
@@ -22,6 +23,8 @@ public class AgentEffectors {
         this.learner = new Learning(this.env);
     }
 
+    //Given an action, the Effectors will send the Action to the Environnement, and decide
+    //if another exploration is needed (also trigger the learning if choosen by the user)
     public boolean doAction(Actions action) {
         if (action == Actions.Sleep) {
             try {

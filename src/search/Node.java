@@ -11,6 +11,7 @@ public class Node {
     public Node parent;
     public Actions action;
     
+    //Constructor
     public Node(int x, int y, int[][] gridState, Node parent, int g, int h, Actions action){
         this.x = x;
         this.y = y;
@@ -21,7 +22,4 @@ public class Node {
         this.f = g + h;
         this.action = action;
     }
-
-    
-    
 }

@@ -3,9 +3,10 @@ import threads.Environnement;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Starting");
-        Environnement env = new Environnement(); //creating and starting the Environnement Thread
+        //Creating the Environnement Thread and the Agent Thread
+        Environnement env = new Environnement();
         Agent agent = new Agent(4, 4, env);
+        //Starting the Threads
         agent.start();
         env.start();
     }

@@ -11,12 +11,14 @@ public class AgentSensors {
     public int y;
     public Environnement env; 
 
+	//Constçructor
     public AgentSensors(int x, int y, Environnement env) throws InterruptedException{
         this.x = x;
         this.y = y;
         this.env = env;
 	}
 	
+	//Update the Agent position on the Grid
 	public void updatePosition(int x, int y){
 		this.x = x;
 		this.y = y;
@@ -29,6 +31,8 @@ public class AgentSensors {
 		return dx + dy;
 	}
 	
+	//Return the Manhattan distance to the closest Element to the Agent on the Grid
+	//depending on the given position, and the state of Grid given
 	public int closestElement(int x, int y, int[][] gridState){
 		if(gridState[x][y] != 0){
 			return 0;
@@ -45,7 +49,8 @@ public class AgentSensors {
 		return minDist;
 	}
     
-    //methode pour savoir toutes les actions disponibles selon la case actuelle
+	//Returns all Actions possible for the Agent depending on his position on the Grid,
+	//and the state of the current Grid cell he is (depending also on the state of Grid given)
     public ArrayList<Actions> availableActions(int x, int y, int[][] gridState){
 		ArrayList<Actions> actions = new ArrayList<Actions>();
 		//Do not get out of boundaries
@@ -61,7 +66,7 @@ public class AgentSensors {
 		if(y != 4){
 			actions.add(Actions.MoveDown);
 		}
-		//check grid state to know if Sucking action or Picking action is needed
+		//Check grid state to know if Sucking action or Picking action is needed
 		if(gridState[x][y] == 2 || gridState[x][y] == 3){
 			actions.add(Actions.Pick);
 		}

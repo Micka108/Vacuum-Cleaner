@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import search.Actions;;
 
 public class Environnement extends Thread {
-    private Stage stage ;
 	private int[][] grid	; // values 0: empty, 1: dust, 2: jewel, 3:both
     private int score;
     private int actions;
@@ -19,13 +18,13 @@ public class Environnement extends Thread {
     private int jewels;
     private int pickedJewels;
     private int suckedJewels;
-    private List<String> events;
     private Window window;
 	private Thread t;
 
-
+    //Constructor
     public Environnement() throws InterruptedException {
         super();
+        //Filling the grid with 0 values
         this.grid = new int[5][5];
         for (int[] row : this.grid) {
             Arrays.fill(row, 0);
@@ -37,27 +36,25 @@ public class Environnement extends Thread {
         this.jewels = 0;
         this.pickedJewels = 0;
         this.suckedJewels = 0;
-        
-        this.events = new ArrayList<String>();
         this.execWindow();
         Window.printDirection("Creating the Environnement");
     }
     
+    //Setting up and launching the GUI Thread
     private void execWindow() throws InterruptedException {
     	this.window = ((Window) this.window);
         this.t = new Thread(() -> Application.launch(Window.class));
         this.t.start();
-        //this.t.run();
 
         Window.awaitFXToolkit();
         Window.initRobot(4, 4);
-        //this.window.p();
     }
 
     public int getScore(){
         return this.score;
     }
     
+    //Randomly generating Dust or Jewel (10% to generate Jewel)
     private void generate() throws InterruptedException {
         double prob = Math.random();
         if (prob >= 0.10 && this.isGridFullOfDust() == false) {
@@ -81,6 +78,12 @@ public class Environnement extends Thread {
         }
     }
 
+    //Updating the score
+    //Each Action/Energy used : -1
+    //Dust generated : -1
+    //Dust sucked : +5
+    //Jewel picked : +10
+    //Jewel sucked : -50
     public void updateScore() {
         this.score = (this.actions * -1) + (this.suckedDusts * 5) + (this.dusts * -1) + (this.pickedJewels * 10)
                 + (this.suckedJewels * -50);
@@ -88,6 +91,7 @@ public class Environnement extends Thread {
         Window.setScore(scores);
     }
 
+    //Used by Agent Sensors to determinate his state
     public boolean isGridEmpty(){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -99,6 +103,7 @@ public class Environnement extends Thread {
         return true;
     }
 
+    //Used to know if any more Dust can be geenrated on the Grid
     private boolean isGridFullOfDust() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -110,6 +115,7 @@ public class Environnement extends Thread {
         return true;
     }
 
+    //Same than previous method, for Jewel
     private boolean isGridFullOfJewels() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -121,10 +127,12 @@ public class Environnement extends Thread {
         return true;
     }
 
+    //Return a deep copy of the Grid
     public int[][] getGrid() {
         return deepCopyOfGrid(this.grid);
     }
 
+    //Create a deep copy for any given Grid
     public static int[][] deepCopyOfGrid(int[][] grid){
         int[][] newGrid = new int[5][5];
         for (int i = 0; i < 5; i++)
@@ -132,16 +140,17 @@ public class Environnement extends Thread {
         return newGrid;
     }
 
+    //Change the state of a given Grid case, depending on the action given
     public boolean changeGridState(int x, int y, Actions keyword) throws InterruptedException {
         // keywords : newDust -> +1, if dust already here does nothing
         // newJewel -> +2, if jewel already does nothing
         // suck -> check value, set it to 0, check if jewel was sucked.
         // pick -> check value, -2 if jewel was here, otherwise nothing
         // sleep -> agent is idle, decrease actions
-        // ******************************************************************************************
         if (keyword == Actions.NewDust && (this.grid[x][y] != 1 || this.grid[x][y] != 3)) {
             this.dusts++;
             this.grid[x][y] += 1;
+            //Used to change the display on the GUI, and send a message to print in the scrollBox
             Platform.runLater(
                 () -> {
                     Window.printDirection("New dust at ("+x+";"+y+")");
@@ -252,21 +261,19 @@ public class Environnement extends Thread {
         return null;
     }
 
+    //Thread main loop
     @Override
     public void run() {
         while(true){
             try {
                 this.generate();
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-                //e1.printStackTrace();
                 ;
             }
             
             try {
                 Thread.sleep(2500);
             } catch (InterruptedException e) {
-                //e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
         }
